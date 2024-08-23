@@ -80,7 +80,7 @@ footer {
     padding: 15px;
 }
 
-.category {
+.post-tag {
     background-color: #3498db;
     border: 1px solid #ccc;
     border-radius: 13px;
@@ -197,13 +197,13 @@ footer {
 
 
 .title,
-.category1 {
+.tag1 {
     font-weight: bold;
     margin-bottom: 8px;
 }
 
 .title input,
-.category1 input,
+.tag1 input,
 .postDescription {
     width: 100%;
     max-width: 100%;
@@ -225,7 +225,7 @@ footer {
 }
 
 .postTitle:focus,
-.postCategory:focus,
+.postTag:focus,
 .postDescription:focus {
     outline: none;
     border-color: #3498db;

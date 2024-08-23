@@ -21,38 +21,66 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('detailDate');
     const detailDescription = 
         document.getElementById('detailDescription');
+    const loginModal = 
+        document.getElementById("loginModal");
+                // Get the button that opens the login modal
+    const loginBtn = 
+        document.getElementById("loginBtn");    
+            // Get the <span> element that closes the modal
+    const closeLoginModal = 
+        document.getElementById("closeLoginModal");
+
+    const postDescription = 
+        String(document.getElementById('postDescription').value);
 
     createPostBtn.addEventListener('click', function () {
         createPostModal.style.display = 'flex';
     });
 
-    closeModal.addEventListener('click', function () {
-        // Add fadeOut class
-        createPostModal.classList.add('fadeOut');
-        setTimeout(() => {
-            createPostModal.style.display = 'none';
-            // Remove fadeOut class
-            createPostModal.classList.remove('fadeOut');
-        }, 500);
-    });
+    loginBtn.onclick = function() {
+        loginModal.style.display = 'flex';
+    };
 
-    postForm.addEventListener('submit', function (event) {
-        event.preventDefault();
+        closeModal.addEventListener('click', function () {
+            // Add fadeOut class
+            createPostModal.classList.add('fadeOut');
+            setTimeout(() => {
+                createPostModal.style.display = 'none';
+                // Remove fadeOut class
+                createPostModal.classList.remove('fadeOut');
+            }, 500);
+        });
+    
+        postForm.addEventListener('submit', function (event) {
+            event.preventDefault();
+            const formData = new FormData(postForm);
+
+        fetch('https://pikachu-silent-disco-062c2bd13f2a.herokuapp.com/create-post', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Show a success message or redirect to another page
+                document.getElementById('postCreatedMessage').style.display = 'block';
+                setTimeout(() => {
+                    document.getElementById('postCreatedMessage').style.display = 'none';
+                }, 3000);
+            } else {
+                // Handle the error case
+                alert('Error creating post');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error creating post');
+        });
+    });
+});
 
         // Validation
-        const postCategory = 
-            document.getElementById('postCategory').value;
-        const postTitle = 
-            document.getElementById('postTitle').value;
-        const postDescription = 
-            document.getElementById('postDescription').value;
-
-        if (postCategory.trim() === '' ||
-         postTitle.trim() === '' || 
-         postDescription.trim() === '') {
-            alert('Please fill out all fields.');
-            return;
-        }
+        //add validation steps later
 
         // Get the current date
         const currentDate = new Date();
@@ -63,6 +91,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const formattedDate = day + ' ' + month + ' ' + year;
 
         // Create a new post element
+      
         const newPost = document.createElement('div');
         newPost.className = 'post-box';
         newPost.innerHTML = `
@@ -70,8 +99,6 @@ document.addEventListener('DOMContentLoaded', function () {
          data-date="${formattedDate}"
           data-description="${postDescription}">
             ${postTitle}</h1><br>
-            
-        <h2 class="category">${postCategory}</h2><br>
         <span class="post-date">${formattedDate}</span>
         <p class="post-description">
         ${postDescription.substring(0, 100)}...</p>
@@ -82,6 +109,7 @@ document.addEventListener('DOMContentLoaded', function () {
         data-description="${postDescription}">
         Load more</span>
         `;
+    
 
         // Append the new post to the post container
         postContainer.insertBefore(newPost, 
@@ -101,7 +129,6 @@ document.addEventListener('DOMContentLoaded', function () {
         setTimeout(() => {
             postCreatedMessage.style.display = 'none';
         }, 3000);
-    });
 
     postContainer.addEventListener('click', function (event) {
         if (event.target.classList.contains('load-more') ||
@@ -150,4 +177,3 @@ document.addEventListener('DOMContentLoaded', function () {
           postDetailModal.classList.remove('fadeOut'); 
         }, 500);
     });
-});
